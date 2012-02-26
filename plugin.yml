@@ -1,0 +1,7 @@
+name: Chestpack
+main: me.exphc.Chestpack.Chestpack
+version: 0
+commands:
+    chestpack:
+        description: Test something
+        usage: /<command>
