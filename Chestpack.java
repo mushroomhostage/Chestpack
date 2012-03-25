@@ -81,45 +81,11 @@ class ChestpackListener implements Listener {
 
         loadPack(id, inventory);
 
-        // TODO: we need an InventoryView..how?
-        player.openInventory(inventory);
+        InventoryView view = player.openInventory(inventory);
 
         savePack(id, inventory);
     }
 
-    /** Save contents of pack to disk. */
-    private void savePack(int id, Inventory inventory) {
-        plugin.getConfig().set("inventory."+id, inventory.getContents());
-        plugin.saveConfig();
-    }
-
-    /** Load contents of pack from disk. */
-    @SuppressWarnings("unchecked")
-    private void loadPack(int id, Inventory inventory) {
-        plugin.reloadConfig();
-
-        List<?> list = plugin.getConfig().getList("inventory."+id);
-
-        if (list != null) {
-            for (int i = 0; i < list.size(); i += 1) {
-                inventory.setItem(i, (ItemStack)list.get(i));
-            }
-
-            //inventory.setContents(contents);
-        }
-    }
-
-    /** Get a textual 'name' of the backpack for display purposes. */
-    private String getPackDisplayName(ItemStack item) {
-        int level = getPackId(item);
-        switch (level) {
-        case 0: return "???";       // should not happen
-        case 1: return "empty";     // uninitialized
-        default: return "#" + level;
-        }
-        // TODO: arbitrarily assignable string names?
-        // TODO: include player name (creator) in pack name?
-    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onInventoryClose(InventoryCloseEvent event) {
@@ -150,6 +116,56 @@ class ChestpackListener implements Listener {
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         // picked up a backpack item? (TODO: prevent?)
         checkEquipPack(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Item itemEntity = event.getItemDrop();
+        ItemStack itemStack = itemEntity.getItemStack();
+
+        if (!isPack(itemStack)) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+
+        itemEntity.remove();
+
+        boolean dropped = dropPack(player, itemStack);
+        if (!dropped) {
+            // failed to drop..we can't have this lingering around as an item..return to player
+            // TODO: test better
+            event.setCancelled(true);
+        }
+    }
+
+
+    // DROPPING AND EQUIPPING
+
+    /** Drop a backpack item into the physical world as a chest block.
+    @return Whether backpack was successfully dropped
+    */
+    private boolean dropPack(Player player, ItemStack item) {
+        // Find out where to drop backpack as a block
+        Block block = player.getTargetBlock(null, 5).getRelative(BlockFace.UP);
+        // TODO: get face of targetted block
+        // TODO: only place in air
+        // TODO: avoid placing adjacent to another chest to make a doublechest..
+        if (block == null) {
+            // TODO: set in a more reasonable location?
+            //block = itemEntity.getLocation().getBlock();
+            player.sendMessage("Unable to drop backpack here");
+            return false;
+        }
+
+        player.sendMessage("Backpack dropped: " + getPackDisplayName(item));
+
+        // TODO: permissions
+        block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
+        // TODO: identify as pack
+        // TODO: populate contents
+
+        return true;
     }
 
     /** Wear a player's pack in their chestplate slot, if they have one in their inventory.
@@ -194,6 +210,8 @@ class ChestpackListener implements Listener {
         player.sendMessage("Backpack equipped: " + getPackDisplayName(item));
     }
 
+    /// IDENTIFYING, LOADING, AND SAVING
+
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
 
     /** Get whether the item is a pack.
@@ -209,54 +227,41 @@ class ChestpackListener implements Listener {
         return item.getEnchantmentLevel(FORTUNE);
     }
 
-
-
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
-        Item itemEntity = event.getItemDrop();
-        ItemStack itemStack = itemEntity.getItemStack();
-
-        if (!isPack(itemStack)) {
-            return;
+    /** Get a textual 'name' of the backpack for display purposes. */
+    private String getPackDisplayName(ItemStack item) {
+        int level = getPackId(item);
+        switch (level) {
+        case 0: return "???";       // should not happen
+        case 1: return "empty";     // uninitialized
+        default: return "#" + level;
         }
+        // TODO: arbitrarily assignable string names?
+        // TODO: include player name (creator) in pack name?
+    }
 
-        Player player = event.getPlayer();
 
-        itemEntity.remove();
+    /** Save contents of pack to disk. */
+    private void savePack(int id, Inventory inventory) {
+        plugin.getConfig().set("inventory."+id, inventory.getContents());
+        plugin.saveConfig();
+    }
 
-        boolean dropped = dropPack(player, itemStack);
-        if (!dropped) {
-            // failed to drop..we can't have this lingering around as an item..return to player
-            // TODO: test better
-            event.setCancelled(true);
+    /** Load contents of pack from disk. */
+    @SuppressWarnings("unchecked")
+    private void loadPack(int id, Inventory inventory) {
+        plugin.reloadConfig();
+
+        List<?> list = plugin.getConfig().getList("inventory."+id);
+
+        if (list != null) {
+            for (int i = 0; i < list.size(); i += 1) {
+                inventory.setItem(i, (ItemStack)list.get(i));
+            }
+
+            //inventory.setContents(contents);
         }
     }
 
-    /** Drop a backpack item into the physical world as a chest block.
-    @return Whether backpack was successfully dropped
-    */
-    private boolean dropPack(Player player, ItemStack item) {
-        // Find out where to drop backpack as a block
-        Block block = player.getTargetBlock(null, 5).getRelative(BlockFace.UP);
-        // TODO: get face of targetted block
-        // TODO: only place in air
-        // TODO: avoid placing adjacent to another chest to make a doublechest..
-        if (block == null) {
-            // TODO: set in a more reasonable location?
-            //block = itemEntity.getLocation().getBlock();
-            player.sendMessage("Unable to drop backpack here");
-            return false;
-        }
-
-        player.sendMessage("Backpack dropped: " + getPackDisplayName(item));
-
-        // TODO: permissions
-        block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
-        // TODO: identify as pack
-        // TODO: populate contents
-
-        return true;
-    }
 }
 
 public class Chestpack extends JavaPlugin {
