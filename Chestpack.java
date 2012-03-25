@@ -94,6 +94,7 @@ class ChestpackListener implements Listener {
         int previousSlot = event.getPreviousSlot();
         if (isPack(player.getInventory().getContents()[previousSlot])) {
             // backpack was held in hand, then switched off of it = wear it
+            // TODO: other options? drop? or only drop if e.g. sneaking? (can always 'Q' = drop, though)
             equipPack(player, previousSlot);
         }
     }
@@ -128,9 +129,15 @@ class ChestpackListener implements Listener {
     */
     private void equipPack(Player player, int slot) {
         // existing armor falls off
-        ItemStack drop = player.getInventory().getChestplate();
-        if (drop != null) {
-            player.getWorld().dropItemNaturally(player.getLocation(), drop);
+        ItemStack old = player.getInventory().getChestplate();
+        if (old != null) {
+            if (isPack(old)) {
+                // if dropping another backpack, place on ground
+                dropPack(player, old);
+            } else {
+                // simply fall to ground (probably will pickup as item)
+                player.getWorld().dropItemNaturally(player.getLocation(), old);
+            }
         }
 
         // equip pack
@@ -164,23 +171,38 @@ class ChestpackListener implements Listener {
 
         itemEntity.remove();
 
-        player.sendMessage("Backpack dropped");
+        boolean dropped = dropPack(player, itemStack);
+        if (!dropped) {
+            // failed to drop..we can't have this lingering around as an item..return to player
+            // TODO: test
+            event.setCancelled(true);
+        }
+    }
 
+    /** Drop a backpack item into the physical world as a chest block.
+    @return Whether backpack was successfully dropped
+    */
+    private boolean dropPack(Player player, ItemStack item) {
         // Find out where to drop backpack as a block
         Block block = player.getTargetBlock(null, 5).getRelative(BlockFace.UP);
         // TODO: get face of targetted block
         // TODO: only place in air
         // TODO: avoid placing adjacent to another chest to make a doublechest..
         if (block == null) {
-            // TODO: set in a more reasonable location
-            block = itemEntity.getLocation().getBlock();
+            // TODO: set in a more reasonable location?
+            //block = itemEntity.getLocation().getBlock();
+            player.sendMessage("Unable to drop backpack here");
+            return false;
         }
 
+        player.sendMessage("Backpack dropped");
 
         // TODO: permissions
         block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
         // TODO: identify as pack
         // TODO: populate contents
+
+        return true;
     }
 }
 
