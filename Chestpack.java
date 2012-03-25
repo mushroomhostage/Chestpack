@@ -77,6 +77,29 @@ class ChestpackListener implements Listener {
         plugin.log.info("open");
     }
 
+    private int getPackId(Player player, ItemStack item) {
+        int level = item.getEnchantmentLevel(FORTUNE);
+        if (level > 1) {
+            // already has an id assigned
+            return level;
+        }
+        // level 1 is special, meaning empty uninitialized backpack
+        // TODO: initialize
+        return 1;
+    }
+
+    /** Get a textual 'name' of the backpack for display purposes. */
+    private String getPackDisplayName(ItemStack item) {
+        int level = item.getEnchantmentLevel(FORTUNE);
+        switch (level) {
+        case 0: return "???";       // should not happen
+        case 1: return "empty";     // uninitialized
+        default: return "#" + level;
+        }
+        // TODO: arbitrarily assignable string names?
+        // TODO: include player name (creator) in pack name?
+    }
+
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onInventoryClose(InventoryCloseEvent event) {
         for (HumanEntity viewer: event.getViewers()) {
@@ -147,7 +170,7 @@ class ChestpackListener implements Listener {
         player.getInventory().setChestplate(item);
         player.getInventory().clear(slot);
 
-        player.sendMessage("Backpack equipped");
+        player.sendMessage("Backpack equipped: " + getPackDisplayName(item));
     }
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
@@ -197,7 +220,7 @@ class ChestpackListener implements Listener {
             return false;
         }
 
-        player.sendMessage("Backpack dropped");
+        player.sendMessage("Backpack dropped: " + getPackDisplayName(item));
 
         // TODO: permissions
         block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
