@@ -77,8 +77,26 @@ class ChestpackListener implements Listener {
 
         Inventory inventory = Bukkit.createInventory(player, numSlots, "Backpack");
 
+        int id = getPackId(item);
+
+        loadPack(id, inventory);
         player.openInventory(inventory);
-        plugin.log.info("open");
+        savePack(id, inventory);
+    }
+
+    private void savePack(int id, Inventory inventory) {
+        plugin.getConfig().set("inventory."+id, inventory.getContents());
+        plugin.saveConfig();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadPack(int id, Inventory inventory) {
+        plugin.reloadConfig();
+
+        ItemStack[] contents = (ItemStack[])plugin.getConfig().get("inventory."+id);
+        if (contents != null) {
+            inventory.setContents(contents);
+        }
     }
 
     /** Get a textual 'name' of the backpack for display purposes. */
