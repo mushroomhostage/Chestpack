@@ -108,6 +108,27 @@ class ChestpackListener implements Listener {
         // Represented by a chest with a special enchantment
         return item != null && item.getType() == Material.CHEST && item.containsEnchantment(FORTUNE);
     }
+
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Item itemEntity = event.getItemDrop();
+        ItemStack itemStack = itemEntity.getItemStack();
+
+        if (!isPack(itemStack)) {
+            return;
+        }
+
+        itemEntity.remove();
+
+        plugin.log.info("You dropped your backpack!");
+
+        // TODO: set in a more reasonable location
+        Block block = itemEntity.getLocation().getBlock();
+        block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
+        // TODO: identify as pack
+        // TODO: populate contents
+    }
 }
 
 public class Chestpack extends JavaPlugin {
