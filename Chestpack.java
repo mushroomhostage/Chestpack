@@ -59,14 +59,22 @@ class ChestpackListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
-    public void onInventoryCloseEvent(InventoryCloseEvent event) {
+    public void onInventoryClose(InventoryCloseEvent event) {
         for (HumanEntity viewer: event.getViewers()) {
             if (!(viewer instanceof Player)) {
                 continue;
             }
 
+            // crafted a backpack? wear it!
             checkEquipPack((Player)viewer);
         }
+    }
+
+    // TODO: why broken?
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        // picked up a backpack item? (TODO: prevent?)
+        checkEquipPack(event.getPlayer());
     }
 
     /** Wear a player's pack in their chestplate slot, if they have one in their inventory.
@@ -86,6 +94,8 @@ class ChestpackListener implements Listener {
                 // equip pack
                 player.getInventory().setChestplate(item);
                 player.getInventory().clear(i);
+
+                player.sendMessage("Wearing backpack");
             }
         }
     }
