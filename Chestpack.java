@@ -59,8 +59,44 @@ class ChestpackListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
-    public void onInventoryEvent(InventoryEvent event) {
-        plugin.log.info("inv "+event);
+    public void onInventoryCloseEvent(InventoryCloseEvent event) {
+        for (HumanEntity viewer: event.getViewers()) {
+            if (!(viewer instanceof Player)) {
+                continue;
+            }
+
+            checkEquipPack((Player)viewer);
+        }
+    }
+
+    /** Wear a player's pack in their chestplate slot, if they have one in their inventory.
+    */
+    private void checkEquipPack(Player player) {
+        ItemStack[] inventory = player.getInventory().getContents();
+
+        for (int i = 0; i < inventory.length; i += 1) {
+            ItemStack item = inventory[i];
+            if (isPack(item)) {
+                // existing armor falls off
+                ItemStack drop = player.getInventory().getChestplate();
+                if (drop != null) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), drop);
+                }
+
+                // equip pack
+                player.getInventory().setChestplate(item);
+                player.getInventory().clear(i);
+            }
+        }
+    }
+
+    final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
+
+    /** Get whether the item is a chestpack.
+    */
+    private boolean isPack(ItemStack item) {
+        // Represented by a chest with a special enchantment
+        return item != null && item.getType() == Material.CHEST && item.containsEnchantment(FORTUNE);
     }
 }
 
