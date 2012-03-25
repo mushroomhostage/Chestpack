@@ -77,20 +77,9 @@ class ChestpackListener implements Listener {
         plugin.log.info("open");
     }
 
-    private int getPackId(Player player, ItemStack item) {
-        int level = item.getEnchantmentLevel(FORTUNE);
-        if (level > 1) {
-            // already has an id assigned
-            return level;
-        }
-        // level 1 is special, meaning empty uninitialized backpack
-        // TODO: initialize
-        return 1;
-    }
-
     /** Get a textual 'name' of the backpack for display purposes. */
     private String getPackDisplayName(ItemStack item) {
-        int level = item.getEnchantmentLevel(FORTUNE);
+        int level = getPackId(item);
         switch (level) {
         case 0: return "???";       // should not happen
         case 1: return "empty";     // uninitialized
@@ -175,12 +164,19 @@ class ChestpackListener implements Listener {
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
 
-    /** Get whether the item is a chestpack.
+    /** Get whether the item is a pack.
     */
     private boolean isPack(ItemStack item) {
         // Represented by a chest with a special enchantment
         return item != null && item.getType() == Material.CHEST && item.containsEnchantment(FORTUNE);
     }
+
+    /** Get the identifier for the pack (1 = empty, greater than 1 = uniquely assigned)
+    */
+    private int getPackId(ItemStack item) {
+        return item.getEnchantmentLevel(FORTUNE);
+    }
+
 
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
@@ -199,7 +195,7 @@ class ChestpackListener implements Listener {
         boolean dropped = dropPack(player, itemStack);
         if (!dropped) {
             // failed to drop..we can't have this lingering around as an item..return to player
-            // TODO: test
+            // TODO: test better
             event.setCancelled(true);
         }
     }
