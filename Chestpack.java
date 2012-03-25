@@ -80,22 +80,32 @@ class ChestpackListener implements Listener {
         int id = getPackId(item);
 
         loadPack(id, inventory);
+
+        // TODO: we need an InventoryView..how?
         player.openInventory(inventory);
+
         savePack(id, inventory);
     }
 
+    /** Save contents of pack to disk. */
     private void savePack(int id, Inventory inventory) {
         plugin.getConfig().set("inventory."+id, inventory.getContents());
         plugin.saveConfig();
     }
 
+    /** Load contents of pack from disk. */
     @SuppressWarnings("unchecked")
     private void loadPack(int id, Inventory inventory) {
         plugin.reloadConfig();
 
-        ItemStack[] contents = (ItemStack[])plugin.getConfig().get("inventory."+id);
-        if (contents != null) {
-            inventory.setContents(contents);
+        List<?> list = plugin.getConfig().getList("inventory."+id);
+
+        if (list != null) {
+            for (int i = 0; i < list.size(); i += 1) {
+                inventory.setItem(i, (ItemStack)list.get(i));
+            }
+
+            //inventory.setContents(contents);
         }
     }
 
