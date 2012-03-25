@@ -56,6 +56,23 @@ class ChestpackListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+
+        if (item == null || !isPack(item)) {
+            return;
+        }
+
+        Action action = event.getAction();
+
+        if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
+            // left-click to open
+            openPack(player, item);
+        }
+    }
+
+    private void openPack(Player player, ItemStack item) {
+        Inventory inventory = Bukkit.createInventory(player, 54, "Backpack");
+        plugin.log.info("open");
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
@@ -84,6 +101,12 @@ class ChestpackListener implements Listener {
 
         for (int i = 0; i < inventory.length; i += 1) {
             ItemStack item = inventory[i];
+
+            if (item == null || item.equals(player.getItemInHand())) {
+                // You're allowed to hold backpacks in your hand (or on your back, but nowhere else)
+                continue;
+            }
+
             if (isPack(item)) {
                 // existing armor falls off
                 ItemStack drop = player.getInventory().getChestplate();
