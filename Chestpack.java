@@ -31,6 +31,7 @@ import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.*;
 import org.bukkit.scheduler.*;
 import org.bukkit.enchantments.*;
+import org.bukkit.inventory.*;
 import org.bukkit.*;
 
 import net.minecraft.server.CraftingManager;
@@ -48,7 +49,12 @@ class ChestpackListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        player.getInventory().setChestplate(new ItemStack(Material.CHEST, 1));
+        //player.getInventory().setChestplate(new ItemStack(Material.CHEST, 1));
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
     }
 }
 
@@ -56,9 +62,29 @@ public class Chestpack extends JavaPlugin {
     Logger log = Logger.getLogger("Minecraft");
 
     public void onEnable() {
+        loadRecipe();
+
         new ChestpackListener(this);
     }
 
     public void onDisable() {
+        Bukkit.resetRecipes();  // TODO: can we reset only ours?
+    }
+
+    final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
+
+    private void loadRecipe() {
+        ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
+        emptyPack.addUnsafeEnchantment(FORTUNE, 1);
+
+        ShapedRecipe recipe = new ShapedRecipe(emptyPack);
+        recipe.shape(
+            "LLL",
+            "LCL",
+            "LLL");
+        recipe.setIngredient('L', Material.LEATHER);
+        recipe.setIngredient('C', Material.CHEST);
+
+        Bukkit.addRecipe(recipe);
     }
 }
