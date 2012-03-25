@@ -82,13 +82,14 @@ class ChestpackListener implements Listener {
         loadPack(id, inventory);
 
         InventoryView view = player.openInventory(inventory);
-
-        savePack(id, inventory);
     }
 
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onInventoryClose(InventoryCloseEvent event) {
+        plugin.log.info("close "+event.getView().getTitle());
+
+        // Anytime rearrange inventory, have to check if moved to/from chestplate/hand/other
         for (HumanEntity viewer: event.getViewers()) {
             if (!(viewer instanceof Player)) {
                 continue;
@@ -96,6 +97,15 @@ class ChestpackListener implements Listener {
 
             // crafted a backpack? wear it!
             checkEquipPack((Player)viewer);
+        }
+
+        // Save pack on close
+        if (event.getView().getTitle().startsWith("Backpack")) {
+            // TODO: remove from player!
+
+            int id = 1; // TODO
+
+            savePack(id, event.getInventory());
         }
     }
 
