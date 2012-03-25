@@ -71,7 +71,11 @@ class ChestpackListener implements Listener {
     }
 
     private void openPack(Player player, ItemStack item) {
-        Inventory inventory = Bukkit.createInventory(player, 54, "Backpack");
+        // Size of pack, must be multiple of 9. Large chest = 54=6*9
+        // >54 glitches client UI, but <54 is fine. 45=5*9=Slightly smaller.
+        int numSlots = plugin.getConfig().getInt("packSize", 5*9); 
+
+        Inventory inventory = Bukkit.createInventory(player, numSlots, "Backpack");
 
         player.openInventory(inventory);
         plugin.log.info("open");
@@ -231,6 +235,10 @@ public class Chestpack extends JavaPlugin {
     Logger log = Logger.getLogger("Minecraft");
 
     public void onEnable() {
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+        reloadConfig();
+
         loadRecipe();
 
         new ChestpackListener(this);
