@@ -95,7 +95,7 @@ class ChestpackListener implements Listener {
                 player.getInventory().setChestplate(item);
                 player.getInventory().clear(i);
 
-                player.sendMessage("Wearing backpack");
+                player.sendMessage("Backpack equipped");
             }
         }
     }
@@ -119,12 +119,23 @@ class ChestpackListener implements Listener {
             return;
         }
 
+        Player player = event.getPlayer();
+
         itemEntity.remove();
 
-        plugin.log.info("You dropped your backpack!");
+        player.sendMessage("Backpack dropped");
 
-        // TODO: set in a more reasonable location
-        Block block = itemEntity.getLocation().getBlock();
+        // Find out where to drop backpack as a block
+        Block block = player.getTargetBlock(null, 5).getRelative(BlockFace.UP);
+        // TODO: get face of targetted block
+        // TODO: only place in air
+        if (block == null) {
+            // TODO: set in a more reasonable location
+            block = itemEntity.getLocation().getBlock();
+        }
+
+
+        // TODO: permissions
         block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
         // TODO: identify as pack
         // TODO: populate contents
