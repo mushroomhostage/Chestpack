@@ -72,6 +72,8 @@ class ChestpackListener implements Listener {
 
     private void openPack(Player player, ItemStack item) {
         Inventory inventory = Bukkit.createInventory(player, 54, "Backpack");
+
+        player.openInventory(inventory);
         plugin.log.info("open");
     }
 
