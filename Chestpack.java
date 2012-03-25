@@ -77,6 +77,8 @@ public class Chestpack extends JavaPlugin {
         ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
         emptyPack.addUnsafeEnchantment(FORTUNE, 1);
 
+        /* // TODO: isolate why shaped recipes still lose on 1.2.3-R0.2
+        https://bukkit.atlassian.net/browse/BUKKIT-602
         ShapedRecipe recipe = new ShapedRecipe(emptyPack);
         recipe.shape(
             "LLL",
@@ -84,6 +86,13 @@ public class Chestpack extends JavaPlugin {
             "LLL");
         recipe.setIngredient('L', Material.LEATHER);
         recipe.setIngredient('C', Material.CHEST);
+        */
+
+        // as a workaround, do shapeless instead
+
+        ShapelessRecipe recipe = new ShapelessRecipe(emptyPack);
+        recipe.addIngredient(8, Material.LEATHER);
+        recipe.addIngredient(1, Material.CHEST);
 
         Bukkit.addRecipe(recipe);
     }
