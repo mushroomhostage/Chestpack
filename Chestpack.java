@@ -87,6 +87,17 @@ class ChestpackListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
+    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+
+        int previousSlot = event.getPreviousSlot();
+        if (isPack(player.getInventory().getContents()[previousSlot])) {
+            // backpack was held in hand, then switched off of it = wear it
+            equipPack(player, previousSlot);
+        }
+    }
+
     // TODO: why broken?
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
@@ -108,19 +119,26 @@ class ChestpackListener implements Listener {
             }
 
             if (isPack(item)) {
-                // existing armor falls off
-                ItemStack drop = player.getInventory().getChestplate();
-                if (drop != null) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), drop);
-                }
-
-                // equip pack
-                player.getInventory().setChestplate(item);
-                player.getInventory().clear(i);
-
-                player.sendMessage("Backpack equipped");
+                equipPack(player, i);
             }
         }
+    }
+
+    /** Wear a backpack, transferring from existing inventory slot. 
+    */
+    private void equipPack(Player player, int slot) {
+        // existing armor falls off
+        ItemStack drop = player.getInventory().getChestplate();
+        if (drop != null) {
+            player.getWorld().dropItemNaturally(player.getLocation(), drop);
+        }
+
+        // equip pack
+        ItemStack item = player.getInventory().getContents()[slot];
+        player.getInventory().setChestplate(item);
+        player.getInventory().clear(slot);
+
+        player.sendMessage("Backpack equipped");
     }
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
@@ -152,6 +170,7 @@ class ChestpackListener implements Listener {
         Block block = player.getTargetBlock(null, 5).getRelative(BlockFace.UP);
         // TODO: get face of targetted block
         // TODO: only place in air
+        // TODO: avoid placing adjacent to another chest to make a doublechest..
         if (block == null) {
             // TODO: set in a more reasonable location
             block = itemEntity.getLocation().getBlock();
