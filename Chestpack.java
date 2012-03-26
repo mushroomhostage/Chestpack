@@ -197,7 +197,17 @@ class ChestpackListener implements Listener {
             }
 
             if (isPack(item)) {
-                equipPack(player, i);
+                final int HOTBAR_SIZE = 9;
+                if (i < HOTBAR_SIZE) {
+                    // Placed in hotbar, so move it to item held
+                    // TODO: can we change held slot? guess not
+                    ItemStack old = player.getItemInHand();
+                    player.setItemInHand(item);
+                    player.getInventory().setItem(i, old);
+                } else {
+                    // Placed elsewhere in inventory, so wear it
+                    equipPack(player, i);
+                }
             }
         }
     }
