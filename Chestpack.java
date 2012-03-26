@@ -109,6 +109,8 @@ class ChestpackListener implements Listener {
         if (title.startsWith("Backpack")) {
             int id = Integer.parseInt(title.replace("Backpack ", "")); // :(
 
+            // TODO: should we prevent nested backpacks?
+
             // Note: broken on 1.2.3-R0.2. Works on 1.2.4 snapshots: craftbukkit-1.2.4-R0.1-20120325.235512-21.jar
             savePack(id, event.getInventory());
         }
