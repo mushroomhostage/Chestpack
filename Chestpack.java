@@ -75,13 +75,20 @@ class ChestpackListener implements Listener {
         // >54 glitches client UI, but <54 is fine. 45=5*9=Slightly smaller.
         int numSlots = plugin.getConfig().getInt("packSize", 5*9); 
 
-        Inventory inventory = Bukkit.createInventory(player, numSlots, "Backpack");
-
         int id = getPackId(item);
+        if (id == 1) {
+            // New blank pack
+            id = newPackId();
+
+            item.addUnsafeEnchantment(FORTUNE, id);
+        }
+
+        Inventory inventory = Bukkit.createInventory(player, numSlots, "Backpack " + id);
 
         loadPack(id, inventory);
 
         InventoryView view = player.openInventory(inventory);
+        // will be saved on close
     }
 
 
@@ -98,11 +105,11 @@ class ChestpackListener implements Listener {
         }
 
         // Save pack on close
-        if (event.getView().getTitle().startsWith("Backpack")) {
-            // TODO: remove from player!
+        String title = event.getView().getTitle();
+        if (title.startsWith("Backpack")) {
+            int id = Integer.parseInt(title.replace("Backpack ", "")); // :(
 
-            int id = 1; // TODO
-
+            // Note: broken on 1.2.3-R0.2. Works on 1.2.4 snapshots: craftbukkit-1.2.4-R0.1-20120325.235512-21.jar
             savePack(id, event.getInventory());
         }
     }
@@ -221,7 +228,6 @@ class ChestpackListener implements Listener {
     /// IDENTIFYING, LOADING, AND SAVING
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
-
     /** Get whether the item is a pack.
     */
     private boolean isPack(ItemStack item) {
@@ -233,6 +239,15 @@ class ChestpackListener implements Listener {
     */
     private int getPackId(ItemStack item) {
         return item.getEnchantmentLevel(FORTUNE);
+    }
+
+    private int newPackId() {
+        int next = plugin.getConfig().getInt("nextId", 2);
+
+        plugin.getConfig().set("nextId", next + 1);
+        plugin.saveConfig();
+
+        return next;
     }
 
     /** Get a textual 'name' of the backpack for display purposes. */
