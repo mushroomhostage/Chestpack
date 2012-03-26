@@ -87,8 +87,6 @@ class ChestpackListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onInventoryClose(InventoryCloseEvent event) {
-        plugin.log.info("close "+event.getView().getTitle());
-
         // Anytime rearrange inventory, have to check if moved to/from chestplate/hand/other
         for (HumanEntity viewer: event.getViewers()) {
             if (!(viewer instanceof Player)) {
