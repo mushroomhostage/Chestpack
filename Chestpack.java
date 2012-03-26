@@ -175,8 +175,31 @@ class ChestpackListener implements Listener {
 
         player.sendMessage("Backpack dropped: " + getPackDisplayName(item));
 
-        // TODO: permissions
+        // TODO: respect world protection
         block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
+        // since backpacks can be larger, need a double chest
+        block.getRelative(BlockFace.NORTH).setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
+
+        BlockState blockState = block.getState();
+        if (!(blockState instanceof Chest)) {
+            plugin.log.info("Failed to find dropped chest");
+            return true;    // so don't dupe
+        }
+
+        Chest chest = (Chest)blockState;
+
+        plugin.log.info("chest="+chest);
+
+        Inventory inventory = chest.getBlockInventory();
+        if (!(inventory instanceof DoubleChestInventory)) {
+            plugin.log.info("Failed to find double chest inventory");
+            return true;
+        }
+        DoubleChestInventory chestInventory = (DoubleChestInventory)inventory;
+
+        plugin.log.info("dci="+chestInventory);
+
+
         // TODO: identify as pack
         // TODO: populate contents
 
