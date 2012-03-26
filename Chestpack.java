@@ -141,21 +141,30 @@ class ChestpackListener implements Listener {
         if (!isPack(itemStack)) {
             return;
         }
+        
+        if (shouldDropAsItem()) {
+            // disable chest drops
+            return;
+        }
 
         Player player = event.getPlayer();
-
-        itemEntity.remove();
 
         boolean dropped = dropPack(player, itemStack);
         if (!dropped) {
             // failed to drop..we can't have this lingering around as an item..return to player
             // TODO: test better
             event.setCancelled(true);
+        } else {
+            itemEntity.remove();
         }
     }
 
 
     // DROPPING AND EQUIPPING
+
+    private boolean shouldDropAsItem() {
+        return plugin.getConfig().getBoolean("dropAsItem", true);
+    }
 
     /** Drop a backpack item into the physical world as a chest block.
     @return Whether backpack was successfully dropped
@@ -241,7 +250,7 @@ class ChestpackListener implements Listener {
         // existing armor falls off
         ItemStack old = player.getInventory().getChestplate();
         if (old != null) {
-            if (isPack(old)) {
+            if (isPack(old) && !shouldDropAsItem()) {
                 // if dropping another backpack, place on ground
                 dropPack(player, old);
             } else {
