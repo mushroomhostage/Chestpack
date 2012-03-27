@@ -415,16 +415,16 @@ public class Chestpack extends JavaPlugin {
             int count = ((Integer)map.get("material_count")).intValue();
             int size = ((Integer)map.get("size")).intValue();
 
-            boolean crafting = map.get("crafting") != null && ((Boolean)map.get("crafting"));
+            boolean hasWorkbench = map.get("hasWorkbench") != null && ((Boolean)map.get("hasWorkbench"));
 
-            log.info("Recipe "+material+" x "+count+" = "+size+(crafting ? " (integrated workbench)" : ""));
+            log.info("Recipe "+material+" x "+count+" = "+size+(hasWorkbench ? " (integrated workbench)" : ""));
 
             ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
             emptyPack.addUnsafeEnchantment(FORTUNE, 1);  // blank
 
             emptyPack.addUnsafeEnchantment(EFFICIENCY, size);
 
-            if (crafting) {
+            if (hasWorkbench) {
                 emptyPack.addUnsafeEnchantment(POWER, 1);
             }
 
