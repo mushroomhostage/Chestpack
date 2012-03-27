@@ -64,7 +64,8 @@ class ChestpackListener implements Listener {
 
         Action action = event.getAction();
 
-        if (player.isSneaking()) {
+        // sneaking opens workbench, if pack has one
+        if (hasIntegratedWorkbench(item) && player.isSneaking()) {
             player.openWorkbench(player.getLocation(), true);
             event.setCancelled(true);
             return;
@@ -73,6 +74,7 @@ class ChestpackListener implements Listener {
         //if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
         // TODO: left-click to open, right-click to place (set down as chest)
 
+        // open 
         openPack(player, item);
         event.setCancelled(true);
     }
@@ -278,6 +280,7 @@ class ChestpackListener implements Listener {
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
     final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
+    final Enchantment POWER = Enchantment.ARROW_KNOCKBACK;
 
     /** Get whether the item is a pack.
     */
@@ -298,6 +301,10 @@ class ChestpackListener implements Listener {
         // Size of pack, must be multiple of 9. Large chest = 54=6*9
         // >54 glitches client UI, but <54 is fine. 45=5*9=Slightly smaller.
         return item.getEnchantmentLevel(EFFICIENCY);
+    }
+
+    private boolean hasIntegratedWorkbench(ItemStack item) {
+        return item.containsEnchantment(POWER);
     }
 
     private int newPackId() {
@@ -365,6 +372,7 @@ public class Chestpack extends JavaPlugin {
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
     final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
+    final Enchantment POWER = Enchantment.ARROW_KNOCKBACK;
 
     private void loadRecipes() {
         // Crafting recipes for packs of different types
@@ -378,12 +386,18 @@ public class Chestpack extends JavaPlugin {
             int count = ((Integer)map.get("material_count")).intValue();
             int size = ((Integer)map.get("size")).intValue();
 
-            log.info("Recipe "+material+" x "+count+" = "+size);
+            boolean crafting = map.get("crafting") != null && ((Boolean)map.get("crafting"));
+
+            log.info("Recipe "+material+" x "+count+" = "+size+(crafting ? " (integrated workbench)" : ""));
 
             ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
             emptyPack.addUnsafeEnchantment(FORTUNE, 1);  // blank
 
             emptyPack.addUnsafeEnchantment(EFFICIENCY, size);
+
+            if (crafting) {
+                emptyPack.addUnsafeEnchantment(POWER, 1);
+            }
 
             /* // TODO: isolate why shaped recipes still lose on 1.2.3-R0.2
             https://bukkit.atlassian.net/browse/BUKKIT-602
