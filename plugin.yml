@@ -3,5 +3,15 @@ main: me.exphc.Chestpack.Chestpack
 version: 0
 commands:
     chestpack:
-        description: Test something
-        usage: /<command>
+        description: Open a chestpack
+        usage: /<command> id
+        aliases: [pack, cp]
+permissions:
+    chestpack.*:
+        children: 
+            chestpack.admin: true
+        default: false
+    chestpack.admin:
+        description: Allows you to open any chestpack with the /chestpack command
+        default: op
+

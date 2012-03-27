@@ -38,7 +38,7 @@ import org.bukkit.*;
 import net.minecraft.server.CraftingManager;
 
 class ChestpackListener implements Listener {
-    Chestpack plugin;
+    static Chestpack plugin;
 
     public ChestpackListener(Chestpack plugin) {
         this.plugin = plugin;
@@ -82,8 +82,6 @@ class ChestpackListener implements Listener {
     }
 
     private void openPack(Player player, ItemStack item) {
-        int numSlots = getPackSize(item);
-
         int id = getPackId(item);
         if (id == 1) {
             // New blank pack
@@ -92,6 +90,12 @@ class ChestpackListener implements Listener {
             item.addUnsafeEnchantment(FORTUNE, id);
         }
 
+        int numSlots = getPackSize(item);
+
+        openPack(player, id, numSlots);
+    }
+
+    public static void openPack(Player player, int id, int numSlots) {
         Inventory inventory = Bukkit.createInventory(player, numSlots, "Backpack " + id);
 
         loadPack(id, inventory);
@@ -99,6 +103,7 @@ class ChestpackListener implements Listener {
         InventoryView view = player.openInventory(inventory);
         // will be saved on close
     }
+
 
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
@@ -366,7 +371,7 @@ class ChestpackListener implements Listener {
 
     /** Load contents of pack from disk. */
     @SuppressWarnings("unchecked")
-    private void loadPack(int id, Inventory inventory) {
+    private static void loadPack(int id, Inventory inventory) {
         plugin.reloadConfig();
 
         List<?> list = plugin.getConfig().getList("inventory."+id);
@@ -447,5 +452,39 @@ public class Chestpack extends JavaPlugin {
 
             Bukkit.addRecipe(recipe);
         }
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        if (!cmd.getName().equalsIgnoreCase("chestpack")) {
+            return false;
+        }
+    
+        if (!(sender instanceof Player)) {
+            // TODO: allow listing inventory textually from console
+            return false;
+        }
+
+        Player player = (Player)sender;
+
+        if (!player.hasPermission("chestpack.admin")) {
+            player.sendMessage("You do not have permission");
+            return true;
+        }
+
+        if (args.length != 1) {
+            return false;
+        }
+
+        try {
+            int id = Integer.parseInt(args[0]);
+
+            int numSlots = getConfig().getInt("maxSlots", 54);
+
+            ChestpackListener.openPack(player, id, numSlots);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }

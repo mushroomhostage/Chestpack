@@ -42,6 +42,8 @@ to open it.
 allowNesting: If enabled, packs can be stored within packs. When disabled
 (the default), attempts to nest packs will drop them to the ground. 
 
+maxSlots: Number of slots to show with /chestpack command.
+
 packTypes: A list of the packs to allow crafting for. Each item has several fields:
 
 packTypes material: The material to craft the pack from (in addition to the required chest).
@@ -55,14 +57,15 @@ packTypes hasWorkbench: If true, the pack can be shift-clicked to open an integr
 The default configuration is:
 
     allowNesting: false
+    maxSlots: 54
     packTypes:
         - {material: leather, material_count: 8, size: 45}
         - {material: wool, material_count: 8, size: 27, hasWorkbench: true}
         - {material: string, material_count: 4, size: 9}
 
 
-Alternatively you can disable Chestpack's crafting recipe and use another plugin to add more complex custom recipes.
-Simply add a recipe to craft a chest with the following enchantments:"
+Alternatively you can disable Chestpack's recipes and use another plugin to add more complex custom recipes.
+Simply add a recipe to craft a chest with the following enchantments:
 
 * Fortune I - identifies an empty pack (higher levels are used as unique identifiers)
 * Efficiency # - level is number of slots
@@ -70,7 +73,10 @@ Simply add a recipe to craft a chest with the following enchantments:"
 
 
 ## Permissions and Commands
-None
+
+chestpack.admin (op): Allows you to open any chestpack with the /chestpack command
+
+/chestpack id: Opens chestpack with the given id (2 or greater).
 
 ## Caveats
 The chest pack item shows up as a normal "Chest" in the player inventory. But its behavior

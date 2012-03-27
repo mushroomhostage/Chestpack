@@ -1,4 +1,5 @@
 allowNesting: false
+maxSlots: 54
 packTypes:
     - {material: leather, material_count: 8, size: 45}
     - {material: wool, material_count: 8, size: 27, hasWorkbench: true}
