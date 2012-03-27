@@ -66,6 +66,8 @@ class ChestpackListener implements Listener {
 
         // sneaking opens workbench, if pack has one
         if (hasIntegratedWorkbench(item) && player.isSneaking()) {
+            // TODO: can we save/load the workbench inventory, so you can partially craft
+            // something then return to it later? that would be cool. like BC2 Automatic Crafting Table
             player.openWorkbench(player.getLocation(), true);
             event.setCancelled(true);
             return;
@@ -116,10 +118,25 @@ class ChestpackListener implements Listener {
         if (title.startsWith("Backpack")) {
             int id = Integer.parseInt(title.replace("Backpack ", "")); // :(
 
-            // TODO: should we prevent nested backpacks?
+            Inventory inventory = event.getInventory();
+
+            if (plugin.getConfig().getBoolean("allowNesting", false)) {
+                // If tried to put a pack within a pack.. pop it out
+                ItemStack[] contents = inventory.getContents();
+                for (int i = 0; i < contents.length; i += 1) {
+                    if (isPack(contents[i])) {
+                        // a pack within a pack..
+                        // TODO: separately check if is SAME pack within itself (heh, its IS possible)
+                        HumanEntity firstViewer = event.getViewers().get(0);
+                        firstViewer.getWorld().dropItemNaturally(firstViewer.getLocation(), contents[i]);
+
+                        inventory.setItem(i, null);
+                    }
+                }
+            }
 
             // Note: broken on 1.2.3-R0.2. Works on 1.2.4 snapshots: craftbukkit-1.2.4-R0.1-20120325.235512-21.jar
-            savePack(id, event.getInventory());
+            savePack(id, inventory);
         }
     }
 
