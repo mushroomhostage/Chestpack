@@ -58,24 +58,23 @@ class ChestpackListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
 
-        if (item == null) {
+        if (item == null || !isPack(item)) {
             return;
         }
 
         Action action = event.getAction();
 
-        if (isPack(item)) {
-            //if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
-            // TODO: left-click to open, right-click to place (set down as chest)
-
-            // left-click to open
-            openPack(player, item);
-
-            event.setCancelled(true);
-        } else if (isPortableWorkbench(item)) {
+        if (player.isSneaking()) {
             player.openWorkbench(player.getLocation(), true);
             event.setCancelled(true);
+            return;
         }
+
+        //if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
+        // TODO: left-click to open, right-click to place (set down as chest)
+
+        openPack(player, item);
+        event.setCancelled(true);
     }
 
     private void openPack(Player player, ItemStack item) {
@@ -287,10 +286,6 @@ class ChestpackListener implements Listener {
         return item != null && item.getType() == Material.CHEST && item.containsEnchantment(FORTUNE);
     }
 
-    private boolean isPortableWorkbench(ItemStack item) {
-        return item != null && item.getType() == Material.WORKBENCH && item.containsEnchantment(EFFICIENCY);
-    }
-
     /** Get the identifier for the pack (1 = empty, greater than 1 = uniquely assigned)
     */
     private int getPackId(ItemStack item) {
@@ -359,8 +354,7 @@ public class Chestpack extends JavaPlugin {
         saveConfig();
         reloadConfig();
 
-        loadBenchRecipe();
-        loadPackRecipes();
+        loadRecipes();
 
         new ChestpackListener(this);
     }
@@ -372,24 +366,7 @@ public class Chestpack extends JavaPlugin {
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
     final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
 
-    private void loadBenchRecipe() {
-        Material material = Material.matchMaterial(getConfig().getString("portableWorkbench.material", "leather"));
-        if (material == null) {
-            return;
-        }
-
-        int count = getConfig().getInt("portableWorkbench.count", 8);
-
-        ItemStack portableBench = new ItemStack(Material.WORKBENCH);
-        portableBench.addUnsafeEnchantment(EFFICIENCY, 1);
-
-        ShapelessRecipe recipe = new ShapelessRecipe(portableBench);
-        recipe.addIngredient(count, material, -1);
-        recipe.addIngredient(1, Material.WORKBENCH);
-        Bukkit.addRecipe(recipe);
-    }
-
-    private void loadPackRecipes() {
+    private void loadRecipes() {
         // Crafting recipes for packs of different types
         List<Map<?,?>> maps = getConfig().getMapList("packTypes");
         for (Map<?,?> map: maps) {
