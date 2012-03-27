@@ -135,11 +135,23 @@ class ChestpackListener implements Listener {
         }
     }
 
-    // TODO: why broken?
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-        // picked up a backpack item? (TODO: prevent?)
-        checkEquipPack(event.getPlayer());
+        Item item = event.getItem();
+        ItemStack itemStack = item.getItemStack();
+
+        if (isPack(itemStack)) {
+            event.getPlayer().sendMessage("Backpack picked up: " + getPackDisplayName(itemStack));
+        }
+
+        // Equip or hold the pack picked up 
+        // - we must do this after the event is completed, so we can look at the new inventory
+        final Player player = event.getPlayer();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            public void run() {
+                checkEquipPack(player);
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
