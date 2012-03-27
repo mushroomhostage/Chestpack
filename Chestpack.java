@@ -391,7 +391,7 @@ public class Chestpack extends JavaPlugin {
             // as a workaround, do shapeless instead
 
             ShapelessRecipe recipe = new ShapelessRecipe(emptyPack);
-            recipe.addIngredient(count, material);
+            recipe.addIngredient(count, material, -1);
             recipe.addIngredient(1, Material.CHEST);
 
             Bukkit.addRecipe(recipe);
