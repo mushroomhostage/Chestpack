@@ -71,9 +71,7 @@ class ChestpackListener implements Listener {
     }
 
     private void openPack(Player player, ItemStack item) {
-        // Size of pack, must be multiple of 9. Large chest = 54=6*9
-        // >54 glitches client UI, but <54 is fine. 45=5*9=Slightly smaller.
-        int numSlots = plugin.getConfig().getInt("packSize", 5*9); 
+        int numSlots = getPackSize(item);
 
         int id = getPackId(item);
         if (id == 1) {
@@ -272,6 +270,8 @@ class ChestpackListener implements Listener {
     /// IDENTIFYING, LOADING, AND SAVING
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
+    final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
+
     /** Get whether the item is a pack.
     */
     private boolean isPack(ItemStack item) {
@@ -283,6 +283,14 @@ class ChestpackListener implements Listener {
     */
     private int getPackId(ItemStack item) {
         return item.getEnchantmentLevel(FORTUNE);
+    }
+
+    /** Get the size of a pack, in number of slots it can hold.
+    */
+    private int getPackSize(ItemStack item) {
+        // Size of pack, must be multiple of 9. Large chest = 54=6*9
+        // >54 glitches client UI, but <54 is fine. 45=5*9=Slightly smaller.
+        return item.getEnchantmentLevel(EFFICIENCY);
     }
 
     private int newPackId() {
@@ -339,7 +347,7 @@ public class Chestpack extends JavaPlugin {
         saveConfig();
         reloadConfig();
 
-        loadRecipe();
+        loadRecipes();
 
         new ChestpackListener(this);
     }
@@ -349,28 +357,44 @@ public class Chestpack extends JavaPlugin {
     }
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
+    final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
 
-    private void loadRecipe() {
-        ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
-        emptyPack.addUnsafeEnchantment(FORTUNE, 1);
+    private void loadRecipes() {
+        List<Map<?,?>> maps = getConfig().getMapList("packTypes");
+        for (Map<?,?> map: maps) {
+            Material material = Material.matchMaterial((String)map.get("material"));
+            if (material == null) {
+                log.warning("Invalid material "+material+", ignored");
+                continue;
+            }
+            int count = ((Integer)map.get("material_count")).intValue();
+            int size = ((Integer)map.get("size")).intValue();
 
-        /* // TODO: isolate why shaped recipes still lose on 1.2.3-R0.2
-        https://bukkit.atlassian.net/browse/BUKKIT-602
-        ShapedRecipe recipe = new ShapedRecipe(emptyPack);
-        recipe.shape(
-            "LLL",
-            "LCL",
-            "LLL");
-        recipe.setIngredient('L', Material.LEATHER);
-        recipe.setIngredient('C', Material.CHEST);
-        */
+            log.info("Recipe "+material+" x "+count+" = "+size);
 
-        // as a workaround, do shapeless instead
+            ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
+            emptyPack.addUnsafeEnchantment(FORTUNE, 1);  // blank
 
-        ShapelessRecipe recipe = new ShapelessRecipe(emptyPack);
-        recipe.addIngredient(8, Material.LEATHER);
-        recipe.addIngredient(1, Material.CHEST);
+            emptyPack.addUnsafeEnchantment(EFFICIENCY, size);
 
-        Bukkit.addRecipe(recipe);
+            /* // TODO: isolate why shaped recipes still lose on 1.2.3-R0.2
+            https://bukkit.atlassian.net/browse/BUKKIT-602
+            ShapedRecipe recipe = new ShapedRecipe(emptyPack);
+            recipe.shape(
+                "LLL",
+                "LCL",
+                "LLL");
+            recipe.setIngredient('L', Material.LEATHER);
+            recipe.setIngredient('C', Material.CHEST);
+            */
+
+            // as a workaround, do shapeless instead
+
+            ShapelessRecipe recipe = new ShapelessRecipe(emptyPack);
+            recipe.addIngredient(count, material);
+            recipe.addIngredient(1, Material.CHEST);
+
+            Bukkit.addRecipe(recipe);
+        }
     }
 }

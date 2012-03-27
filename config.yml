@@ -1,2 +1,5 @@
-packSize: 45
+packTypes:
+    - {material: leather, material_count: 8, size: 45}
+    - {material: wool, material_count: 8, size: 27}
+    - {material: string, material_count: 4, size: 9}
 
