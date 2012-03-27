@@ -64,10 +64,13 @@ class ChestpackListener implements Listener {
 
         Action action = event.getAction();
 
-        if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
-            // left-click to open
-            openPack(player, item);
-        }
+        //if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
+        // TODO: left-click to open, right-click to place (set down as chest)
+
+        // left-click to open
+        openPack(player, item);
+
+        event.setCancelled(true);
     }
 
     private void openPack(Player player, ItemStack item) {
