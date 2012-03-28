@@ -76,7 +76,7 @@ Simply add a recipe to craft a chest with the following enchantments:
 
 chestpack.admin (op): Allows you to open any chestpack with the /chestpack command
 
-/chestpack id: Opens chestpack with the given id (2 or greater).
+/chestpack id: Opens chestpack with the given id, 2 or greater (aliases: /pack, /cp).
 
 ## Caveats
 The chest pack item shows up as a normal "Chest" in the player inventory. But its behavior

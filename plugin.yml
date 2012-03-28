@@ -1,6 +1,6 @@
 name: Chestpack
 main: me.exphc.Chestpack.Chestpack
-version: 0
+version: 1.0
 commands:
     chestpack:
         description: Open a chestpack
