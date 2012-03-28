@@ -9,6 +9,7 @@ additional items realistically without being too overpowered.
 
 Features:
 
+* No client mods required
 * Crafting recipes to create packs
 * Three different types, with configurable material and size
 * Optional integrated workbench
