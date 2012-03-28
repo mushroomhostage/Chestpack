@@ -334,7 +334,7 @@ class ChestpackListener implements Listener {
     private int getPackSize(ItemStack item) {
         // Size of pack, must be multiple of 9. Large chest = 54=6*9
         // >54 glitches client UI, but <54 is fine. 45=5*9=Slightly smaller.
-        return item.getEnchantmentLevel(EFFICIENCY);
+        return Math.abs(item.getEnchantmentLevel(EFFICIENCY));
     }
 
     private boolean hasIntegratedWorkbench(ItemStack item) {
@@ -430,7 +430,9 @@ public class Chestpack extends JavaPlugin {
             ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
             emptyPack.addUnsafeEnchantment(FORTUNE, 1);  // blank
 
-            emptyPack.addUnsafeEnchantment(EFFICIENCY, size);
+            // store size as negative level so hitting blocks with pack doesn't
+            // efficiently mine away blocks very quickly
+            emptyPack.addUnsafeEnchantment(EFFICIENCY, -size);
 
             if (hasWorkbench) {
                 emptyPack.addUnsafeEnchantment(POWER, 1);
