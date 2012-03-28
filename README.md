@@ -19,9 +19,9 @@ Features:
 ## Usage
 Craft a pack by surrounding a chest with one of:
 
- * 8 leather = 45-slot pack
- * 8 wool = 27-slot pack with integrated workbench
- * 4 string = 9-slot pack
+ * 4 string = 9-slot pack (daypack)
+ * 8 wool = 27-slot pack + integrated workbench (craftsman's backpack)
+ * 8 leather = 45-slot pack (explorer's backpack)
 
 When holding the resulting chest (it appears the same as a normal chest, but is
 actually a special wearable chest), click to open the pack. You can drag items
