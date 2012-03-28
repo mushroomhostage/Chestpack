@@ -420,6 +420,9 @@ public class Chestpack extends JavaPlugin {
             int count = ((Integer)map.get("material_count")).intValue();
             int size = ((Integer)map.get("size")).intValue();
 
+            // can shift-click to open integrated workbench
+            // TODO: portable workbench!/project table basically a workbench which doubles as a 3x3 chest 
+            // (items persist on grid, don't fall off, like Buildcraft's Automatic Crafting Table / RedPower2 Project Table)
             boolean hasWorkbench = map.get("hasWorkbench") != null && ((Boolean)map.get("hasWorkbench"));
 
             log.info("Recipe "+material+" x "+count+" = "+size+(hasWorkbench ? " (integrated workbench)" : ""));
