@@ -5,6 +5,8 @@ Chestpack enables players to craft backpacks of various sizes for augmenting
 their normal player inventory space. It is designed to enable carrying 
 additional items realistically without being too overpowered.
 
+***[New! Chestpack 1.0 released](http://dev.bukkit.org/server-mods/chestpack/files/1-chestpack-1-0/)*** - requires 1.2.4 dev build (tested on 1.2.4-R0.1-20120325.235512-21 snapshot)
+
 Features:
 
 * Crafting recipes to create packs
@@ -82,5 +84,4 @@ chestpack.admin (op): Allows you to open any chestpack with the /chestpack comma
 The chest pack item shows up as a normal "Chest" in the player inventory. But its behavior
 should make it clear how it differs (it auto-equips, can be opened, doesn't stack with other chests).
 
-
-
+***[Fork me on GitHub](https://github.com/mushroomhostage/Chestpack)***
