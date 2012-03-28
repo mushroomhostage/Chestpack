@@ -15,7 +15,7 @@ Features:
 * Wear pack as chestplate for storage
 * Hold pack in your hand to open it
 * Packs are unique and not per-player
-* Nesting packs within packs is prevented (can be enabled)
+* Nesting packs within packs is prevented
 * Somewhat realistic
 
 ## Usage
