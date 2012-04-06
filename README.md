@@ -85,4 +85,11 @@ chestpack.admin (op): Allows you to open any chestpack with the /chestpack comma
 The chest pack item shows up as a normal "Chest" in the player inventory. But its behavior
 should make it clear how it differs (it auto-equips, can be opened, doesn't stack with other chests).
 
+## See also
+
+Other mods or plugins worth checking out:
+
+* [Backpack](http://www.minecraftforum.net/topic/741100-123-backpack-ssp-smp/) - client/server mod with wearable backpacks, magic backpacks
+* [Forestry](http://forestry.sengir.net/wiki/index.php?n=Items.Backpacks) - client/server mod with several item-specific backpacks
+
 ***[Fork me on GitHub](https://github.com/mushroomhostage/Chestpack)***
