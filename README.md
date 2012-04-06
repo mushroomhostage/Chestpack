@@ -5,7 +5,7 @@ Chestpack enables players to craft backpacks of various sizes for augmenting
 their normal player inventory space. It is designed to enable carrying 
 additional items realistically without being too overpowered.
 
-***[New! Chestpack 1.0 released](http://dev.bukkit.org/server-mods/chestpack/files/1-chestpack-1-0/)*** - requires 1.2.4 dev build (tested on 1.2.4-R0.1-20120325.235512-21 snapshot)
+***[Chestpack 1.0 released](http://dev.bukkit.org/server-mods/chestpack/files/1-chestpack-1-0/)*** - requires 1.2.4+
 
 Features:
 
