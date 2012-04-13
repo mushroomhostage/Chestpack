@@ -401,7 +401,7 @@ class ChestpackListener implements Listener {
 
         List<?> list = packConfig.getList("inventory");
         if (list != null) {
-             for (int i = 0; i < list.size(); i += 1) {
+            for (int i = 0; i < Math.min(list.size(), inventory.getSize()); i += 1) {
                 inventory.setItem(i, (ItemStack)list.get(i));
             }
         } else {
@@ -410,7 +410,7 @@ class ChestpackListener implements Listener {
 
             list = plugin.getConfig().getList("inventory."+id);
             if (list != null) {
-                for (int i = 0; i < list.size(); i += 1) {
+                for (int i = 0; i < Math.min(list.size(), inventory.getSize()); i += 1) {
                     inventory.setItem(i, (ItemStack)list.get(i));
                 }
             } 
