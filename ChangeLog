@@ -1,6 +1,7 @@
 X   X
     * Add permission nodes to open chestpacks of each size
     * Add permission node to open integrated workbench
+    * Store each chestpack inventory in separate file
 
 2012-03-27  1.0
     * Initial release

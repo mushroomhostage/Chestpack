@@ -375,23 +375,45 @@ class ChestpackListener implements Listener {
 
     /** Save contents of pack to disk. */
     private void savePack(int id, Inventory inventory) {
-        plugin.getConfig().set("inventory."+id, inventory.getContents());
-        plugin.saveConfig();
+        File packFile = getPackFile(id);
+        FileConfiguration packConfig = YamlConfiguration.loadConfiguration(packFile);
+
+        packConfig.set("inventory", inventory.getContents());
+        try {
+            packConfig.save(packFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** Get file for storing given chestpack id. */
+    private static File getPackFile(int id) {
+        return new File(plugin.getDataFolder(), "pack"+id+".yml"); // TODO: formatting, 0000
     }
 
     /** Load contents of pack from disk. */
     @SuppressWarnings("unchecked")
     private static void loadPack(int id, Inventory inventory) {
-        plugin.reloadConfig();
 
-        List<?> list = plugin.getConfig().getList("inventory."+id);
+        // try new per-file config
+        File packFile = getPackFile(id);
+        FileConfiguration packConfig = YamlConfiguration.loadConfiguration(packFile);
 
+        List<?> list = packConfig.getList("inventory");
         if (list != null) {
-            for (int i = 0; i < list.size(); i += 1) {
+             for (int i = 0; i < list.size(); i += 1) {
                 inventory.setItem(i, (ItemStack)list.get(i));
             }
+        } else {
+            // if fails, try to migrate legacy config
+            plugin.reloadConfig();
 
-            //inventory.setContents(contents);
+            list = plugin.getConfig().getList("inventory."+id);
+            if (list != null) {
+                for (int i = 0; i < list.size(); i += 1) {
+                    inventory.setItem(i, (ItemStack)list.get(i));
+                }
+            } 
         }
     }
 
