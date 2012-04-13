@@ -307,7 +307,16 @@ class ChestpackListener implements Listener {
         }
 
         // existing armor falls off
-        ItemStack old = player.getInventory().getChestplate();
+        ItemStack old;
+        switch (plugin.getConfig().getInt("equipSlot", 2)) {
+        // standard inventory slot number minus 100 http://www.minecraftwiki.net/wiki/Data_values#Inventory_Slot_Number
+        case 3: old = player.getInventory().getHelmet(); break;
+        default:
+        case 2: old = player.getInventory().getChestplate(); break;
+        case 1: old = player.getInventory().getLeggings(); break;
+        case 0: old = player.getInventory().getBoots(); break;
+        }
+
         if (old != null) {
             if (isPack(old) && !shouldDropAsItem()) {
                 // if dropping another backpack, place on ground
@@ -320,7 +329,14 @@ class ChestpackListener implements Listener {
 
         // equip pack
         ItemStack item = player.getInventory().getContents()[slot];
-        player.getInventory().setChestplate(item);
+        switch (plugin.getConfig().getInt("equipSlot", 2)) {
+        case 3: player.getInventory().setHelmet(item); break;
+        default:
+        case 2: player.getInventory().setChestplate(item); break;
+        case 1: player.getInventory().setLeggings(item); break;
+        case 0: player.getInventory().setBoots(item); break;
+        }
+
         player.getInventory().clear(slot);
 
         player.sendMessage("Backpack equipped: " + getPackDisplayName(item));

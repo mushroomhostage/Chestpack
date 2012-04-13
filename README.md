@@ -56,6 +56,9 @@ or wear on your back, but not keep in your "pockets" (other inventory slots).
 Disable along with autoEquip if you want the pack to (less realistically) behave as a normal
 item so you can carry multiple packs.
 
+equipSlot: Player inventory slot to wear the chestpack on if autoEquip enabled.
+3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots.
+
 maxSlots: Number of slots to show with /chestpack command.
 
 packTypes: A list of the packs to allow crafting for. Each item has several fields:
@@ -73,6 +76,7 @@ The default configuration is:
     allowNesting: false
     autoEquip: true
     autoHold: true
+    equipSlot: 2
     maxSlots: 54
     packTypes:
         - {material: leather, material_count: 8, size: 45}
