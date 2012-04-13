@@ -79,6 +79,21 @@ Simply add a recipe to craft a chest with the following enchantments:
 
 chestpack.admin (op): Allows you to open any chestpack with the /chestpack command
 
+chestpack.open.size.9 (true): Allows you to open chestpacks of size 9
+    
+chestpack.open.size.18 (true): Allows you to open chestpacks of size 18
+
+chestpack.open.size.27 (true): Allows you to open chestpacks of size 27
+    
+chestpack.open.size.45 (true): Allows you to open chestpacks of size 45
+    
+chestpack.open.size.54 (true): Allows you to open chestpacks of size 54
+    
+chestpack.open.size.any (false): Allows you to open chestpacks of any size
+
+chestpack.open.workbench (true): Allows you to open integrated workbenches
+
+
 /chestpack id: Opens chestpack with the given id, 2 or greater (aliases: /pack, /cp).
 
 ## Caveats

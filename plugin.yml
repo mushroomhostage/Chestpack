@@ -23,19 +23,19 @@ permissions:
         description: Allows you to open any chestpack with the /chestpack command
         default: op
     chestpack.open.size.9:
-        description: Allows you to open chestpacks of size 9 or smaller
+        description: Allows you to open chestpacks of size 9
         default: true
     chestpack.open.size.18:
-        description: Allows you to open chestpacks of size 18 or smaller
+        description: Allows you to open chestpacks of size 18
         default: true
     chestpack.open.size.27:
-        description: Allows you to open chestpacks of size 27 or smaller
+        description: Allows you to open chestpacks of size 27
         default: true
     chestpack.open.size.45:
-        description: Allows you to open chestpacks of size 45 or smaller
+        description: Allows you to open chestpacks of size 45
         default: true
     chestpack.open.size.54:
-        description: Allows you to open chestpacks of size 54 or smaller
+        description: Allows you to open chestpacks of size 54
         default: true
     chestpack.open.size.any:
         description: Allows you to open chestpacks of any size
