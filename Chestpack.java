@@ -300,6 +300,10 @@ class ChestpackListener implements Listener {
     /** Wear a backpack, transferring from existing inventory slot. 
     */
     private void equipPack(Player player, int slot) {
+        if (!plugin.getConfig().getBoolean("autoEquip", true)) {
+            return; 
+        }
+
         // existing armor falls off
         ItemStack old = player.getInventory().getChestplate();
         if (old != null) {

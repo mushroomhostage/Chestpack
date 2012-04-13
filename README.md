@@ -43,7 +43,11 @@ to open it.
 ## Configuration
 
 allowNesting: If enabled, packs can be stored within packs. When disabled
-(the default), attempts to nest packs will drop them to the ground. 
+(the default), attempts to nest packs will drop them to the ground.
+
+autoEquip: If enabled, packs will automatically equip in your armor slot,
+simulating wearing a chestpack, actively preventing you from storing the
+pack elsewhere in your inventory. 
 
 maxSlots: Number of slots to show with /chestpack command.
 
@@ -60,6 +64,7 @@ packTypes hasWorkbench: If true, the pack can be shift-clicked to open an integr
 The default configuration is:
 
     allowNesting: false
+    autoEqup: true
     maxSlots: 54
     packTypes:
         - {material: leather, material_count: 8, size: 45}
