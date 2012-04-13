@@ -5,16 +5,19 @@ Chestpack enables players to craft backpacks of various sizes for augmenting
 their normal player inventory space. It is designed to enable carrying 
 additional items realistically without being too overpowered.
 
+**[Chestpack 1.1](http://dev.bukkit.org/server-mods/chestpack/files/2-chestpack-1-1/)** - released 2012/04/12 for 1.2.5
+
 Features:
 
 * No client mods required
 * Crafting recipes to create packs
 * Three different types, with configurable material and size
 * Optional integrated workbench
-* Wear pack as chestplate for storage
-* Hold pack in your hand to open it
-* Packs are unique and not per-player
-* Nesting packs within packs is prevented
+* Packs are uniquely identified, and can be opened by id as an admin
+* Equip pack as chestplate for storage (optional)
+* Hold pack in your hand when picked up (optional)
+* Nesting packs within packs is prevented (optional)
+* Permissions support
 * Somewhat realistic
 
 ## Usage
