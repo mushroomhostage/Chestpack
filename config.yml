@@ -1,5 +1,6 @@
 allowNesting: false
 autoEquip: true
+autoHold: true
 maxSlots: 54
 packTypes:
     - {material: leather, material_count: 8, size: 45}

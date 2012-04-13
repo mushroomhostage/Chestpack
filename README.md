@@ -49,6 +49,13 @@ autoEquip: If enabled, packs will automatically equip in your armor slot,
 simulating wearing a chestpack, actively preventing you from storing the
 pack elsewhere in your inventory. 
 
+autoHold: If enabled, packs will automatically be held in your hand if
+placed in your hotbar or picked up from the ground. Along with autoEquip,
+this option is meant to simulate a pack you can either hold in your hands
+or wear on your back, but not keep in your "pockets" (other inventory slots).
+Disable along with autoEquip if you want the pack to (less realistically) behave as a normal
+item so you can carry multiple packs.
+
 maxSlots: Number of slots to show with /chestpack command.
 
 packTypes: A list of the packs to allow crafting for. Each item has several fields:
@@ -64,7 +71,8 @@ packTypes hasWorkbench: If true, the pack can be shift-clicked to open an integr
 The default configuration is:
 
     allowNesting: false
-    autoEqup: true
+    autoEquip: true
+    autoHold: true
     maxSlots: 54
     packTypes:
         - {material: leather, material_count: 8, size: 45}
