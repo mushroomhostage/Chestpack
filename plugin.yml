@@ -10,8 +10,37 @@ permissions:
     chestpack.*:
         children: 
             chestpack.admin: true
+            chestpack.open.size.9: true
+            chestpack.open.size.18: true
+            chestpack.open.size.27: true
+            chestpack.open.size.36: true
+            chestpack.open.size.45: true
+            chestpack.open.size.54: true
+            chestpack.open.size.any: true
+            chestpack.open.workbench: true
         default: false
     chestpack.admin:
         description: Allows you to open any chestpack with the /chestpack command
         default: op
+    chestpack.open.size.9:
+        description: Allows you to open chestpacks of size 9 or smaller
+        default: true
+    chestpack.open.size.18:
+        description: Allows you to open chestpacks of size 18 or smaller
+        default: true
+    chestpack.open.size.27:
+        description: Allows you to open chestpacks of size 27 or smaller
+        default: true
+    chestpack.open.size.45:
+        description: Allows you to open chestpacks of size 45 or smaller
+        default: true
+    chestpack.open.size.54:
+        description: Allows you to open chestpacks of size 54 or smaller
+        default: true
+    chestpack.open.size.any:
+        description: Allows you to open chestpacks of any size
+        default: false
+    chestpack.open.workbench:
+        description: Allows you to open integrated workbenches
+        default: true
 

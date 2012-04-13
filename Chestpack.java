@@ -61,24 +61,34 @@ class ChestpackListener implements Listener {
         if (item == null || !isPack(item)) {
             return;
         }
-
-        Action action = event.getAction();
+        // always cancel the event to prevent normal interaction
+        event.setCancelled(true);
 
         // sneaking opens workbench, if pack has one
         if (hasIntegratedWorkbench(item) && player.isSneaking()) {
+            if (!player.hasPermission("chestpack.open.workbench")) {
+                player.sendMessage("You do not have permission to open the integrated workbench");
+                return;
+            }
+
             // TODO: can we save/load the workbench inventory, so you can partially craft
             // something then return to it later? that would be cool. like BC2 Automatic Crafting Table
             player.openWorkbench(player.getLocation(), true);
-            event.setCancelled(true);
             return;
         }
 
+        //Action action = event.getAction();
         //if (action == Action.LEFT_CLICK_AIR || action == action.LEFT_CLICK_BLOCK) {
         // TODO: left-click to open, right-click to place (set down as chest)
 
         // open 
+        int numSlots = getPackSize(item);
+        if (!player.hasPermission("chestpack.open.size." + numSlots) && !player.hasPermission("chestpack.open.size.any")) {
+            player.sendMessage("You do not have permission to open chestpacks of size "+numSlots);
+            return;
+        }
+
         openPack(player, item);
-        event.setCancelled(true);
     }
 
     private void openPack(Player player, ItemStack item) {
