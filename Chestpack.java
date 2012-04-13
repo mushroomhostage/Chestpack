@@ -135,7 +135,7 @@ class ChestpackListener implements Listener {
 
             Inventory inventory = event.getInventory();
 
-            if (plugin.getConfig().getBoolean("allowNesting", false)) {
+            if (!plugin.getConfig().getBoolean("allowNesting", false)) {
                 // If tried to put a pack within a pack.. pop it out
                 ItemStack[] contents = inventory.getContents();
                 for (int i = 0; i < contents.length; i += 1) {

@@ -74,6 +74,7 @@ Simply add a recipe to craft a chest with the following enchantments:
 * Efficiency # - level is number of slots, negated
 * Power - if present, pack has an integrated workbench
 
+Chestpack inventories are stored in separate files, named pack<id>.yml.
 
 ## Permissions and Commands
 
