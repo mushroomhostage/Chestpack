@@ -1,4 +1,4 @@
-X   X
+2012-04-12  1.1
     * Add permission nodes to open chestpacks of each size
     * Add permission node to open integrated workbench
     * Add config option to turn off auto-equipping in armor slot
@@ -6,6 +6,7 @@ X   X
     * Add configurable armor equip slot (helmet, chest, leggings, boots)
     * Store each chestpack inventory in separate file 
     * Fix bug where allowNesting config option did the opposite
+    * Test on CraftBukkit 1.2.5-R1.0
 
 2012-03-27  1.0
     * Initial release
