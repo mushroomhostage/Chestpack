@@ -1,7 +1,7 @@
 allowNesting: false
 maxSlots: 54
 packTypes:
-    - {material: leather, material_count: 8, size: 45, permission: chestpack.open.daypack}
-    - {material: wool, material_count: 8, size: 27, hasWorkbench: true, permission: chestpack.open.craftsmans}
-    - {material: string, material_count: 4, size: 9, permission: chestpack.open.explorers}
+    - {material: leather, material_count: 8, size: 45}
+    - {material: wool, material_count: 8, size: 27, hasWorkbench: true}
+    - {material: string, material_count: 4, size: 9}
 

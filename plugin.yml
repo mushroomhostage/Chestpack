@@ -10,20 +10,8 @@ permissions:
     chestpack.*:
         children: 
             chestpack.admin: true
-            chestpack.open.daypack: true
-            chestpack.open.craftsman: true
-            chestpack.open.explorers: true
         default: false
     chestpack.admin:
         description: Allows you to open any chestpack with the /chestpack command
         default: op
-    chestpack.open.daypack:
-        description: Allows you to open the daypack
-        default: true
-    chestpack.open.craftsman:
-        description: Allows you to open the craftsmans backpack
-        default: true
-    chestpack.open.explorers:
-        description: Allows you to open the explorers backpack
-        default: true
 
