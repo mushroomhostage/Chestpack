@@ -346,7 +346,7 @@ class ChestpackListener implements Listener {
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
     final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
-    final Enchantment POWER = Enchantment.ARROW_KNOCKBACK;
+    final Enchantment PUNCH = Enchantment.ARROW_KNOCKBACK;
 
     /** Get whether the item is a pack.
     */
@@ -370,7 +370,7 @@ class ChestpackListener implements Listener {
     }
 
     private boolean hasIntegratedWorkbench(ItemStack item) {
-        return item.containsEnchantment(POWER);
+        return item.containsEnchantment(PUNCH);
     }
 
     private int newPackId() {
@@ -460,7 +460,7 @@ public class Chestpack extends JavaPlugin {
 
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
     final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
-    final Enchantment POWER = Enchantment.ARROW_KNOCKBACK;
+    final Enchantment PUNCH = Enchantment.ARROW_KNOCKBACK;
 
     private void loadRecipes() {
         // Crafting recipes for packs of different types
@@ -489,7 +489,7 @@ public class Chestpack extends JavaPlugin {
             emptyPack.addUnsafeEnchantment(EFFICIENCY, -size);
 
             if (hasWorkbench) {
-                emptyPack.addUnsafeEnchantment(POWER, 1);
+                emptyPack.addUnsafeEnchantment(PUNCH, 1);
             }
 
             /* // TODO: isolate why shaped recipes still lose on 1.2.3-R0.2
