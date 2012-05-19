@@ -20,6 +20,8 @@ Features:
 * Permissions support
 * Somewhat realistic
 
+[Forum thread](http://forums.bukkit.org/threads/mech-rpg-chestpack-v1-1-extra-storage-in-a-backpack-on-your-chest-1-2-5-r2-0.76470/)
+
 ## Usage
 Craft a pack by surrounding a chest with one of:
 
