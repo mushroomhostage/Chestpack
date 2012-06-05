@@ -118,6 +118,10 @@ class ChestpackListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
     public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getViewers() == null) {
+            return;
+        }
+
         // Anytime rearrange inventory, have to check if moved to/from chestplate/hand/other
         for (HumanEntity viewer: event.getViewers()) {
             if (!(viewer instanceof Player)) {
@@ -129,6 +133,9 @@ class ChestpackListener implements Listener {
         }
 
         // Save pack on close
+        if (event.getView() == null || event.getView().getTitle() == null) {
+            return;
+        }
         String title = event.getView().getTitle();
         if (title.startsWith("Backpack")) {
             int id = Integer.parseInt(title.replace("Backpack ", "")); // :(
