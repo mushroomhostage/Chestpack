@@ -62,7 +62,7 @@ class ChestpackListener implements Listener {
             return;
         }
 
-        if (event.getAction() == Event.RIGHT_CLICK_BLOCK && plugin.getConfig().getBoolean("allowOpenContainers", true)) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.getConfig().getBoolean("allowOpenContainers", true)) {
             Block block = event.getClickedBlock();
             if (block != null) {
                 BlockState blockState = block.getState();
