@@ -59,6 +59,8 @@ or wear on your back, but not keep in your "pockets" (other inventory slots).
 Disable along with autoEquip if you want the pack to (less realistically) behave as a normal
 item so you can carry multiple packs.
 
+allowOpenContainers: Allows you to still open containers (chests, etc.) by right-clicking, instead of opening the pack.
+
 equipSlot: Player inventory slot to wear the chestpack on if autoEquip enabled.
 3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots.
 

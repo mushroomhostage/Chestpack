@@ -61,6 +61,18 @@ class ChestpackListener implements Listener {
         if (item == null || !isPack(item)) {
             return;
         }
+
+        if (event.getAction() == Event.RIGHT_CLICK_BLOCK && plugin.getConfig().getBoolean("allowOpenContainers", true)) {
+            Block block = event.getClickedBlock();
+            if (block != null) {
+                BlockState blockState = block.getState();
+                if (blockState instanceof InventoryHolder) {
+                    // if right-clicked a container, let it open instead of taking over
+                    return;
+                }
+            }
+        }
+
         // always cancel the event to prevent normal interaction
         event.setCancelled(true);
 

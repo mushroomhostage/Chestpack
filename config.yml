@@ -1,6 +1,7 @@
 allowNesting: false
 autoEquip: true
 autoHold: true
+allowOpenContainers: true
 equipSlot: 2
 maxSlots: 54
 packTypes:
