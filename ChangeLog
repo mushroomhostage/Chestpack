@@ -1,6 +1,7 @@
 2012-06-09  1.2
     * Fix not being able to open containers while holding a pack (allowOpenContainers option)
     * Fix NPE in event handler when used with EnderStorage mod
+    * Test on CraftBukkit 1.2.5-R3.0
 
 2012-04-12  1.1
     * Add permission nodes to open chestpacks of each size

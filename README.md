@@ -1,11 +1,8 @@
 Chestpack - extra storage in a backpack on your chest! 
 
-Need extra storage while traveling? Wear a chest on your chest!
-Chestpack enables players to craft backpacks of various sizes for augmenting
-their normal player inventory space. It is designed to enable carrying 
-additional items realistically without being too overpowered.
+Need extra storage while traveling? Wear a chest on your chest!  Chestpack enables players to craft backpacks of various sizes for augmenting their normal player inventory space. It is designed to enable carrying additional items realistically without being too overpowered.
 
-**[Chestpack 1.1](http://dev.bukkit.org/server-mods/chestpack/files/2-chestpack-1-1/)** - released 2012/04/12 for 1.2.5
+**[Chestpack 1.2](http://dev.bukkit.org/server-mods/chestpack/files/3-chestpack-1-2/)** - released 2012/06/09 for 1.2.5
 
 Features:
 
@@ -29,58 +26,44 @@ Craft a pack by surrounding a chest with one of:
  * 8 wool = 27-slot pack + integrated workbench (craftsman's backpack)
  * 8 leather = 45-slot pack (explorer's backpack)
 
-When holding the resulting chest (it appears the same as a normal chest, but is
-actually a special wearable chest), click to open the pack. You can drag items
-to/from the pack and your inventory, as you would expect.
+When holding the resulting chest (it appears the same as a normal chest, but is actually a special wearable chest), click to open the pack. You can drag items to/from the pack and your inventory, as you would expect.
 
 If your pack has an integrated workbench, shift-click to open the crafting area.
 
-When it isn't held in your hand, the pack will move itself to your
-chestplate armor slot, representing the pack being worn on your back as a backpack
-(or on your chest as a chestpack, whatever interpretation you prefer). This is where
-the pack normally resides.
+When it isn't held in your hand, the pack will move itself to your chestplate armor slot, representing the pack being worn on your back as a backpack (or on your chest as a chestpack, whatever interpretation you prefer). This is where the pack normally resides.
 
-To get back into your pack, take it off your back and move it into your hand. Left-click
-to open it. 
+To get back into your pack, take it off your back and move it into your hand. Left-click to open it. 
 
 ## Configuration
 
-allowNesting: If enabled, packs can be stored within packs. When disabled
-(the default), attempts to nest packs will drop them to the ground.
+**allowNesting**: If enabled, packs can be stored within packs. When disabled (the default), attempts to nest packs will drop them to the ground.
 
-autoEquip: If enabled, packs will automatically equip in your armor slot,
-simulating wearing a chestpack, actively preventing you from storing the
-pack elsewhere in your inventory. 
+**autoEquip**: If enabled, packs will automatically equip in your armor slot, simulating wearing a chestpack, actively preventing you from storing the pack elsewhere in your inventory. 
 
-autoHold: If enabled, packs will automatically be held in your hand if
-placed in your hotbar or picked up from the ground. Along with autoEquip,
-this option is meant to simulate a pack you can either hold in your hands
-or wear on your back, but not keep in your "pockets" (other inventory slots).
-Disable along with autoEquip if you want the pack to (less realistically) behave as a normal
-item so you can carry multiple packs.
+**autoHold**: If enabled, packs will automatically be held in your hand if placed in your hotbar or picked up from the ground. Along with autoEquip, this option is meant to simulate a pack you can either hold in your hands or wear on your back, but not keep in your "pockets" (other inventory slots).  Disable along with autoEquip if you want the pack to (less realistically) behave as a normal item so you can carry multiple packs.
 
-allowOpenContainers: Allows you to still open containers (chests, etc.) by right-clicking, instead of opening the pack.
+**allowOpenContainers**: Allows you to still open containers (chests, etc.) by right-clicking, instead of opening the pack.
 
-equipSlot: Player inventory slot to wear the chestpack on if autoEquip enabled.
-3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots.
+**equipSlot**: Player inventory slot to wear the chestpack on if autoEquip enabled.  3 = helmet, 2 = chestplate, 1 = leggings, 0 = boots.
 
-maxSlots: Number of slots to show with /chestpack command.
+**maxSlots**: Number of slots to show with /chestpack command.
 
-packTypes: A list of the packs to allow crafting for. Each item has several fields:
+**packTypes**: A list of the packs to allow crafting for. Each item has several fields:
 
-packTypes material: The material to craft the pack from (in addition to the required chest).
+**packTypes material**: The material to craft the pack from (in addition to the required chest).
 
-packTypes material\_count: Number of material items to require to craft.
+**packTypes material\_count**: Number of material items to require to craft.
 
-packTypes size: Number of slots in the resulting chest. For reference 27 is a small chest, 54 is a large chest.
+**packTypes size**: Number of slots in the resulting chest. For reference 27 is a small chest, 54 is a large chest.
 
-packTypes hasWorkbench: If true, the pack can be shift-clicked to open an integrated crafting table.
+**packTypes hasWorkbench**: If true, the pack can be shift-clicked to open an integrated crafting table.
 
 The default configuration is:
 
     allowNesting: false
     autoEquip: true
     autoHold: true
+    allowOpenContainers: true
     equipSlot: 2
     maxSlots: 54
     packTypes:
@@ -89,8 +72,7 @@ The default configuration is:
         - {material: string, material_count: 4, size: 9}
 
 
-Alternatively you can disable Chestpack's recipes and use another plugin to add more complex custom recipes.
-Simply add a recipe to craft a chest with the following enchantments:
+Alternatively you can disable Chestpack's recipes and use another plugin to add more complex custom recipes.  Simply add a recipe to craft a chest with the following enchantments:
 
 * Fortune I - identifies an empty pack (higher levels are used as unique identifiers)
 * Efficiency # - level is number of slots, negated
@@ -120,8 +102,7 @@ chestpack.open.workbench (true): Allows you to open integrated workbenches
 /chestpack id: Opens chestpack with the given id, 2 or greater (aliases: /pack, /cp).
 
 ## Caveats
-The chest pack item shows up as a normal "Chest" in the player inventory. But its behavior
-should make it clear how it differs (it auto-equips, can be opened, doesn't stack with other chests).
+The chest pack item shows up as a normal "Chest" in the player inventory. But its behavior should make it clear how it differs (it auto-equips, can be opened, doesn't stack with other chests).
 
 ## See also
 
