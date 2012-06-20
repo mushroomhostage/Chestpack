@@ -470,14 +470,14 @@ public class Chestpack extends JavaPlugin {
         saveConfig();
         reloadConfig();
 
-        loadRecipes();
-
         String s = getConfig().getString("chestpackItem", "CHEST");
         chestpackItem = Material.matchMaterial(s);
         if (chestpackItem == null) {
             log.warning("Invalid material name "+s+", using chest");
             chestpackItem = Material.CHEST;     // TODO: should we use numeric IDs instead? but then recipes..
         }
+
+        loadRecipes();
 
         new ChestpackListener(this);
     }
