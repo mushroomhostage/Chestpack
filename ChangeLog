@@ -1,3 +1,6 @@
+X   X
+    * Add configurable chestpackItem
+
 2012-06-09  1.2
     * Fix not being able to open containers while holding a pack (allowOpenContainers option)
     * Fix NPE in event handler when used with EnderStorage mod

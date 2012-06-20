@@ -50,7 +50,7 @@ class ChestpackListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        //player.getInventory().setChestplate(new ItemStack(Material.CHEST, 1));
+        //player.getInventory().setChestplate(new ItemStack(plugin.chestpackItem, 1));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled=true)
@@ -257,9 +257,9 @@ class ChestpackListener implements Listener {
         player.sendMessage("Backpack dropped: " + getPackDisplayName(item));
 
         // TODO: respect world protection
-        block.setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
+        block.setTypeIdAndData(plugin.chestpackItem.getId(), (byte)0, true);
         // since backpacks can be larger, need a double chest
-        block.getRelative(BlockFace.NORTH).setTypeIdAndData(Material.CHEST.getId(), (byte)0, true);
+        block.getRelative(BlockFace.NORTH).setTypeIdAndData(plugin.chestpackItem.getId(), (byte)0, true);
 
         BlockState blockState = block.getState();
         if (!(blockState instanceof Chest)) {
@@ -371,7 +371,7 @@ class ChestpackListener implements Listener {
     */
     private boolean isPack(ItemStack item) {
         // Represented by a chest with a special enchantment
-        return item != null && item.getType() == Material.CHEST && item.containsEnchantment(FORTUNE);
+        return item != null && item.getType() == plugin.chestpackItem && item.containsEnchantment(FORTUNE);
     }
 
     /** Get the identifier for the pack (1 = empty, greater than 1 = uniquely assigned)
@@ -463,12 +463,21 @@ class ChestpackListener implements Listener {
 public class Chestpack extends JavaPlugin {
     Logger log = Logger.getLogger("Minecraft");
 
+    Material chestpackItem;
+
     public void onEnable() {
         getConfig().options().copyDefaults(true);
         saveConfig();
         reloadConfig();
 
         loadRecipes();
+
+        String s = getConfig().getString("chestpackItem", "CHEST");
+        chestpackItem = Material.matchMaterial(s);
+        if (chestpackItem == null) {
+            log.warning("Invalid material name "+s+", using chest");
+            chestpackItem = Material.CHEST;     // TODO: should we use numeric IDs instead? but then recipes..
+        }
 
         new ChestpackListener(this);
     }
@@ -480,6 +489,7 @@ public class Chestpack extends JavaPlugin {
     final Enchantment FORTUNE = Enchantment.LOOT_BONUS_BLOCKS;
     final Enchantment EFFICIENCY = Enchantment.DIG_SPEED;
     final Enchantment PUNCH = Enchantment.ARROW_KNOCKBACK;
+
 
     private void loadRecipes() {
         // Crafting recipes for packs of different types
@@ -500,7 +510,7 @@ public class Chestpack extends JavaPlugin {
 
             log.info("Recipe "+material+" x "+count+" = "+size+(hasWorkbench ? " (integrated workbench)" : ""));
 
-            ItemStack emptyPack = new ItemStack(Material.CHEST, 1);
+            ItemStack emptyPack = new ItemStack(this.chestpackItem, 1);
             emptyPack.addUnsafeEnchantment(FORTUNE, 1);  // blank
 
             // store size as negative level so hitting blocks with pack doesn't
@@ -519,14 +529,14 @@ public class Chestpack extends JavaPlugin {
                 "LCL",
                 "LLL");
             recipe.setIngredient('L', Material.LEATHER);
-            recipe.setIngredient('C', Material.CHEST);
+            recipe.setIngredient('C', plugin.chestpackItem);
             */
 
             // as a workaround, do shapeless instead
 
             ShapelessRecipe recipe = new ShapelessRecipe(emptyPack);
             recipe.addIngredient(count, material, -1);
-            recipe.addIngredient(1, Material.CHEST);
+            recipe.addIngredient(1, this.chestpackItem);
 
             Bukkit.addRecipe(recipe);
         }
