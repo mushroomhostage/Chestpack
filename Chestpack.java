@@ -35,8 +35,6 @@ import org.bukkit.enchantments.*;
 import org.bukkit.inventory.*;
 import org.bukkit.*;
 
-import net.minecraft.server.CraftingManager;
-
 class ChestpackListener implements Listener {
     static Chestpack plugin;
 
